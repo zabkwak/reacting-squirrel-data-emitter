@@ -8,10 +8,11 @@
         "rootDir": "./src",
         "sourceMap": true,
         "declaration": true,
-        "target": "es6",
+        "target": "es5",
         "lib": [
-            "es6"
+            "es6", "dom"
         ],
+		"jsx": "react",
         "plugins": [
             {
                 "name": "typescript-tslint-plugin",
