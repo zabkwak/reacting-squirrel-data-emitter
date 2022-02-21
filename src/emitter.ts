@@ -4,6 +4,8 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 
 	protected _data: T;
 
+	private _loading: boolean = false;
+
 	public addDataListener(listener: (self: this, data: T) => void): this {
 		this.addListener(this._getDataEvent(), listener);
 		return this;
@@ -15,7 +17,12 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 	}
 
 	public async load(): Promise<T> {
+		if (this._loading) {
+			return null;
+		}
+		this._loading = true;
 		const data: T = await this._load();
+		this._loading = false;
 		this._data = data;
 		this._callDataEvent();
 		return data;
