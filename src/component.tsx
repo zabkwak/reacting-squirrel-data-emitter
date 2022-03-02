@@ -99,6 +99,9 @@ export default class EmitterDataComponent<T, E extends Emitter<T> = Emitter<T>, 
 			this.getContext().logWarning('The children as function is deprecated.');
 			EmitterDataComponent._deprecatedShowed = true;
 		}
+		if (typeof children !== 'function') {
+			return null;
+		}
 		// @ts-ignore
 		return children(data, emitter);
 	}
