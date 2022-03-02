@@ -16,6 +16,11 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 		return this;
 	}
 
+	public clearData(): void {
+		this._data = null;
+		this._loading = false;
+	}
+
 	public async load(): Promise<T> {
 		if (this._loading) {
 			return null;
@@ -64,5 +69,11 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 		return new Promise((resolve) => {
 			setTimeout(resolve, timeout);
 		});
+	}
+
+	protected async _checkData(): Promise<void> {
+		if (!this._data) {
+			this._data = await this._load();
+		}
 	}
 }
