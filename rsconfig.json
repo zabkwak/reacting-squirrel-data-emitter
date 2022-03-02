@@ -1,0 +1,14 @@
+{
+	"$schema": "./node_modules/reacting-squirrel/schemas/rsconfig.schema.json",
+	"port": 8081,
+	"dev": true,
+	"routes": [
+		{
+			"route": "/",
+			"title": "Home",
+			"component": "pages/home"
+		}
+	],
+	"appDir": "./__tests__app__",
+	"createMissingComponents": true
+}

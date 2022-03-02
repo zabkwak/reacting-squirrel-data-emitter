@@ -26,6 +26,6 @@
 		"esModuleInterop": true
     },
     "exclude": [
-        "./__tests__", "./dist"
+        "./__tests__", "./dist", "./__tests__app__"
     ]
 }

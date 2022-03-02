@@ -2,7 +2,11 @@ import React from 'react';
 import { Loader, SocketComponent } from 'reacting-squirrel';
 import Emitter from './emitter';
 
-interface IOptionalProps<T, E> {
+export interface IEmitterDataProps<T = any> {
+	emitterData: T;
+}
+
+interface IOptionalProps<T, E> extends Partial<IEmitterDataProps> {
 	LoaderComponent: React.ReactNode;
 	onData: (data: T) => void;
 	onDataUpdate: (data: T) => void;
@@ -11,7 +15,7 @@ interface IOptionalProps<T, E> {
 }
 
 export interface IProps<T, E> extends Partial<IOptionalProps<T, E>> {
-	children: (data: T, emitter: E) => JSX.Element;
+	children: JSX.Element | JSX.Element[] | ((data: T, emitter: E) => JSX.Element);
 	emitter: E;
 }
 
@@ -19,6 +23,8 @@ interface IState<T> {
 	data: T;
 	error: any;
 }
+
+export const DataContext = React.createContext<Record<string, any>>({});
 
 // tslint:disable-next-line: max-line-length
 export default class EmitterDataComponent<T, E extends Emitter<T> = Emitter<T>, P extends IProps<T, E> = IProps<T, E>>
@@ -30,7 +36,10 @@ export default class EmitterDataComponent<T, E extends Emitter<T> = Emitter<T>, 
 		onDataUpdate: null,
 		onError: null,
 		renderError: null,
+		emitterData: {},
 	};
+
+	private static _deprecatedShowed: boolean = false;
 
 	public state: IState<T> = {
 		data: this.props.emitter.get(),
@@ -73,6 +82,24 @@ export default class EmitterDataComponent<T, E extends Emitter<T> = Emitter<T>, 
 		if (!data) {
 			return LoaderComponent || <Loader loaded={false} block={false} size="small" />;
 		}
+		if (React.isValidElement(children)) {
+			return (
+				<DataContext.Consumer>
+					{
+						(prevData) => (
+							<DataContext.Provider value={{ ...prevData, [emitter.getKey()]: data }}>
+								{children}
+							</DataContext.Provider>
+						)
+					}
+				</DataContext.Consumer>
+			);
+		}
+		if (!EmitterDataComponent._deprecatedShowed) {
+			this.getContext().logWarning('The children as function is deprecated.');
+			EmitterDataComponent._deprecatedShowed = true;
+		}
+		// @ts-ignore
 		return children(data, emitter);
 	}
 

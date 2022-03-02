@@ -2,3 +2,6 @@
 /dist
 /index.js
 /.env
+
+/public
+/__tests__app__

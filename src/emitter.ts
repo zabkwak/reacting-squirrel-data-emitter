@@ -46,6 +46,10 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 		return this._data;
 	}
 
+	public getKey(): string {
+		return this._getDataEvent();
+	}
+
 	protected _callDataEvent(): void {
 		this._callListener(this._getDataEvent(), this._data);
 	}

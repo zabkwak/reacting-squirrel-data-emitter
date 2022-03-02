@@ -4,3 +4,7 @@
 /__tests__
 /tsconfig.json
 /.env
+
+/public
+/__tests__app__
+/rsconfig.json
