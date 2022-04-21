@@ -24,7 +24,7 @@ interface IState<T> {
 	error: any;
 }
 
-export const DataContext = React.createContext<Record<string, any>>({});
+export const DataContext = React.createContext<any>({});
 
 // tslint:disable-next-line: max-line-length
 export default class EmitterDataComponent<T, E extends Emitter<T> = Emitter<T>, P extends IProps<T, E> = IProps<T, E>>
