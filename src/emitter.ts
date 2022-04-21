@@ -26,7 +26,13 @@ export default abstract class DataEmitter<T> extends SocketRequest {
 			return null;
 		}
 		this._loading = true;
-		const data: T = await this._load();
+		let data: T;
+		try {
+			data = await this._load();
+		} catch (e) {
+			this._loading = false;
+			throw e;
+		}
 		this._loading = false;
 		this._data = data;
 		this._callDataEvent();
